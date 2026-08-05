@@ -1,0 +1,23 @@
+{
+  "state": { "number": 2, "name": "play" },
+  "game": { "focused": true, "paused": false },
+  "beatmap": {
+    "checksum": "abc123", "id": 1234,
+    "artist": "Camellia", "artistUnicode": "かめりあ",
+    "title": "Ghost", "titleUnicode": "Ghost",
+    "mapper": "somemapper", "version": "Insane",
+    "time": { "live": 102000, "firstObject": 1200, "lastObject": 195000, "mp3Length": 198000 },
+    "stats": { "maxCombo": 800, "stars": { "total": 5.73 } }
+  },
+  "play": {
+    "failed": false, "accuracy": 98.32,
+    "hits": { "0": 2, "50": 0, "100": 5, "300": 900, "sliderBreaks": 1 },
+    "combo": { "current": 438, "max": 450 },
+    "mods": { "number": 64, "name": "DT", "rate": 1.5 },
+    "pp": { "current": 247.6, "fc": 300.1 }
+  },
+  "resultsScreen": {
+    "accuracy": 0, "hits": { "0": 0 }, "mods": { "name": "", "rate": 1 },
+    "maxCombo": 0, "pp": { "current": 0, "fc": 0 }
+  }
+}

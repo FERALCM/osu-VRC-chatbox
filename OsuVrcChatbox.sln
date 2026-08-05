@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E6A50328-7B91-443C-9D4E-F0DE08D58E9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsuVrcChatbox.Core", "src\OsuVrcChatbox.Core\OsuVrcChatbox.Core.csproj", "{BEC136DF-F907-45E4-ACAF-5F12E7573457}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsuVrcChatbox.Console", "src\OsuVrcChatbox.Console\OsuVrcChatbox.Console.csproj", "{87F9B9E1-1F24-47BF-B085-DFC89783B5D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4EBA65DF-060A-4EC3-9319-0C6DBA9FAE45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsuVrcChatbox.Core.Tests", "tests\OsuVrcChatbox.Core.Tests\OsuVrcChatbox.Core.Tests.csproj", "{0D4E2512-CF21-4AB7-8024-65A617C8567B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsuVrcChatbox.App", "src\OsuVrcChatbox.App\OsuVrcChatbox.App.csproj", "{1727674C-3A4C-4324-922C-099E9A99C366}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BEC136DF-F907-45E4-ACAF-5F12E7573457}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEC136DF-F907-45E4-ACAF-5F12E7573457}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEC136DF-F907-45E4-ACAF-5F12E7573457}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEC136DF-F907-45E4-ACAF-5F12E7573457}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87F9B9E1-1F24-47BF-B085-DFC89783B5D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87F9B9E1-1F24-47BF-B085-DFC89783B5D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87F9B9E1-1F24-47BF-B085-DFC89783B5D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87F9B9E1-1F24-47BF-B085-DFC89783B5D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D4E2512-CF21-4AB7-8024-65A617C8567B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D4E2512-CF21-4AB7-8024-65A617C8567B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D4E2512-CF21-4AB7-8024-65A617C8567B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D4E2512-CF21-4AB7-8024-65A617C8567B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1727674C-3A4C-4324-922C-099E9A99C366}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1727674C-3A4C-4324-922C-099E9A99C366}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1727674C-3A4C-4324-922C-099E9A99C366}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1727674C-3A4C-4324-922C-099E9A99C366}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BEC136DF-F907-45E4-ACAF-5F12E7573457} = {E6A50328-7B91-443C-9D4E-F0DE08D58E9A}
+		{87F9B9E1-1F24-47BF-B085-DFC89783B5D7} = {E6A50328-7B91-443C-9D4E-F0DE08D58E9A}
+		{0D4E2512-CF21-4AB7-8024-65A617C8567B} = {4EBA65DF-060A-4EC3-9319-0C6DBA9FAE45}
+		{1727674C-3A4C-4324-922C-099E9A99C366} = {E6A50328-7B91-443C-9D4E-F0DE08D58E9A}
+	EndGlobalSection
+EndGlobal
