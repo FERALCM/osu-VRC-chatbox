@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -38,6 +39,7 @@ public sealed class MainViewModel : ObservableObject, IDisposable
 
     private GameplaySnapshot? _lastSnapshot;
     private bool _loading;
+    private Process? _tosuProcess;
 
     public MainViewModel(SettingsStore store, RollingFileLogger logger)
     {
@@ -52,6 +54,7 @@ public sealed class MainViewModel : ObservableObject, IDisposable
         ClearChatboxCommand = new RelayCommand(() => _output?.RequestClear());
         OpenLogsCommand = new RelayCommand(OpenLogs);
         ApplyConnectionCommand = new RelayCommand(() => RebuildPipeline());
+        BrowseTosuCommand = new RelayCommand(BrowseTosuExe);
 
         LoadFromSettings(_store.Load());
         RefreshPreview();
@@ -62,6 +65,7 @@ public sealed class MainViewModel : ObservableObject, IDisposable
     public ICommand ClearChatboxCommand { get; }
     public ICommand OpenLogsCommand { get; }
     public ICommand ApplyConnectionCommand { get; }
+    public ICommand BrowseTosuCommand { get; }
 
     // ── Combo-box sources ───────────────────────────────────────────
     public IReadOnlyList<MessagePreset> Presets { get; } = Enum.GetValues<MessagePreset>();
@@ -131,6 +135,9 @@ public sealed class MainViewModel : ObservableObject, IDisposable
     private int _tosuPort = 24050;
     public int TosuPort { get => _tosuPort; set { if (SetProperty(ref _tosuPort, value)) MarkDirty(); } }
 
+    private string _tosuExePath = "";
+    public string TosuExePath { get => _tosuExePath; set { if (SetProperty(ref _tosuExePath, value)) MarkDirty(); } }
+
     private string _oscIp = "127.0.0.1";
     public string OscIp { get => _oscIp; set { if (SetProperty(ref _oscIp, value)) MarkDirty(); } }
 
@@ -187,7 +194,11 @@ public sealed class MainViewModel : ObservableObject, IDisposable
     // ── Lifecycle ───────────────────────────────────────────────────
 
     /// <summary>Builds and starts the pipeline. Call once after the window is ready.</summary>
-    public void Start() => RebuildPipeline();
+    public void Start()
+    {
+        TryLaunchTosu();
+        RebuildPipeline();
+    }
 
     private void RebuildPipeline()
     {
@@ -316,6 +327,80 @@ public sealed class MainViewModel : ObservableObject, IDisposable
         Accuracy = 98.32, StarRating = 5.73, Score = 1_234_567, HealthBar = 80, BeatmapChecksum = "sample"
     };
 
+    // ── tosu auto-launch ──────────────────────────────────────────
+    private void TryLaunchTosu()
+    {
+        if (string.IsNullOrWhiteSpace(TosuExePath))
+            return;
+
+        if (!File.Exists(TosuExePath))
+        {
+            _logger.Warn($"tosu not found at saved path: {TosuExePath}");
+            _dispatcher.BeginInvoke(() =>
+            {
+                System.Windows.MessageBox.Show(
+                    $"tosu was not found at:\n{TosuExePath}\n\nPlease select the tosu executable.",
+                    "tosu not found",
+                    System.Windows.MessageBoxButton.OK,
+                    System.Windows.MessageBoxImage.Warning);
+                BrowseTosuExe();
+                if (!string.IsNullOrWhiteSpace(TosuExePath) && File.Exists(TosuExePath))
+                    LaunchTosuProcess();
+            });
+            return;
+        }
+
+        LaunchTosuProcess();
+    }
+
+    private void LaunchTosuProcess()
+    {
+        try
+        {
+            if (IsTosuAlreadyRunning())
+            {
+                _logger.Info("tosu is already running, skipping launch.");
+                return;
+            }
+
+            _tosuProcess = Process.Start(new ProcessStartInfo
+            {
+                FileName = TosuExePath,
+                WorkingDirectory = Path.GetDirectoryName(TosuExePath) ?? "",
+                UseShellExecute = true
+            });
+            _logger.Info($"Launched tosu from: {TosuExePath}");
+        }
+        catch (Exception ex)
+        {
+            _logger.Error($"Failed to launch tosu: {ex.Message}");
+        }
+    }
+
+    private static bool IsTosuAlreadyRunning()
+    {
+        try { return Process.GetProcessesByName("tosu").Length > 0; }
+        catch { return false; }
+    }
+
+    private void BrowseTosuExe()
+    {
+        var dlg = new Microsoft.Win32.OpenFileDialog
+        {
+            Title = "Select tosu executable",
+            Filter = "tosu|tosu.exe|All executables|*.exe",
+            FileName = "tosu.exe"
+        };
+        if (!string.IsNullOrWhiteSpace(TosuExePath) && Directory.Exists(Path.GetDirectoryName(TosuExePath)))
+            dlg.InitialDirectory = Path.GetDirectoryName(TosuExePath)!;
+
+        if (dlg.ShowDialog() == true)
+        {
+            TosuExePath = dlg.FileName;
+            PersistSettings();
+        }
+    }
+
     // ── Settings persistence ────────────────────────────────────────
     private void MarkDirty()
     {
@@ -332,7 +417,7 @@ public sealed class MainViewModel : ObservableObject, IDisposable
 
     private AppSettings ToSettings() => new()
     {
-        Tosu = new TosuSettings { Host = TosuHost, Port = TosuPort, AllowRemoteHost = !IsLoopback(TosuHost) },
+        Tosu = new TosuSettings { Host = TosuHost, Port = TosuPort, AllowRemoteHost = !IsLoopback(TosuHost), ExePath = string.IsNullOrWhiteSpace(TosuExePath) ? null : TosuExePath },
         Osc = new OscSettings { Ip = OscIp, Port = OscPort, NotificationSound = NotificationSound },
         Output = new OutputSettings
         {
@@ -361,7 +446,7 @@ public sealed class MainViewModel : ObservableObject, IDisposable
     private void LoadFromSettings(AppSettings s)
     {
         _loading = true;
-        TosuHost = s.Tosu.Host; TosuPort = s.Tosu.Port;
+        TosuHost = s.Tosu.Host; TosuPort = s.Tosu.Port; TosuExePath = s.Tosu.ExePath ?? "";
         OscIp = s.Osc.Ip; OscPort = s.Osc.Port; NotificationSound = s.Osc.NotificationSound;
         MasterEnabled = s.Output.MasterEnabled;
         UpdateIntervalSeconds = s.Output.UpdateIntervalSeconds;
@@ -404,5 +489,6 @@ public sealed class MainViewModel : ObservableObject, IDisposable
         _appCts.Cancel();
         _ = TeardownPipelineAsync();
         _appCts.Dispose();
+        _tosuProcess?.Dispose();
     }
 }

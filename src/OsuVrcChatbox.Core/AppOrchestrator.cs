@@ -172,9 +172,10 @@ public sealed class AppOrchestrator : IAsyncDisposable
         long score = s.ResultsScore > 0 ? s.ResultsScore : s.Score;
         double pp = s.ResultsPp > 0 ? s.ResultsPp : s.PpCurrent;
         int combo = s.ResultsMaxCombo > 0 ? s.ResultsMaxCombo : s.MaxCombo;
+        double accuracy = s.ResultsAccuracy > 0 ? s.ResultsAccuracy : s.Accuracy;
 
         return DegradationPolicy.RenderResults(
-            s.Artist, s.Title, starRating, score, pp, combo, _options.Template.MaxChars);
+            s.Artist, s.Title, starRating, score, pp, combo, accuracy, _options.Template.MaxChars);
     }
 
     private string BuildFailureText(GameplaySnapshot s, GameplayTiming timing)

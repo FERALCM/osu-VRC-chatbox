@@ -185,27 +185,41 @@
 
                 <!-- Connection -->
                 <GroupBox Header="Connection">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="120" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="70" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="tosu host / port" Style="{StaticResource Label}" />
-                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding TosuHost}" Margin="0,2" />
-                        <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding TosuPort}" Margin="4,2,0,2" />
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="VRChat OSC ip / port" Style="{StaticResource Label}" />
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding OscIp}" Margin="0,2" />
-                        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding OscPort}" Margin="4,2,0,2" />
-                        <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Content="Apply &amp; reconnect"
-                                Command="{Binding ApplyConnectionCommand}" HorizontalAlignment="Right"
-                                Padding="10,3" Margin="0,4,0,0" />
-                    </Grid>
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="tosu exe path" Style="{StaticResource Label}" />
+                            <TextBox Grid.Column="1" Text="{Binding TosuExePath}" IsReadOnly="True"
+                                     Margin="0,2" ToolTip="{Binding TosuExePath}" />
+                            <Button Grid.Column="2" Content="Browse..." Command="{Binding BrowseTosuCommand}"
+                                    Padding="8,3" Margin="4,2,0,2" />
+                        </Grid>
+                        <Grid Margin="0,4,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="70" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="tosu host / port" Style="{StaticResource Label}" />
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding TosuHost}" Margin="0,2" />
+                            <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding TosuPort}" Margin="4,2,0,2" />
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="VRChat OSC ip / port" Style="{StaticResource Label}" />
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding OscIp}" Margin="0,2" />
+                            <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding OscPort}" Margin="4,2,0,2" />
+                            <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Content="Apply &amp; reconnect"
+                                    Command="{Binding ApplyConnectionCommand}" HorizontalAlignment="Right"
+                                    Padding="10,3" Margin="0,4,0,0" />
+                        </Grid>
+                    </StackPanel>
                 </GroupBox>
 
                 <!-- Application -->

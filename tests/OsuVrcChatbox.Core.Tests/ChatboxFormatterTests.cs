@@ -187,7 +187,7 @@ public class ChatboxFormatterTests
     [Fact]
     public void RenderResults_produces_two_line_passed_format()
     {
-        string text = DegradationPolicy.RenderResults("Smi x mei", "numb numb", "5.73", 1_234_567, 142.3, 438, 144);
+        string text = DegradationPolicy.RenderResults("Smi x mei", "numb numb", "5.73", 1_234_567, 142.3, 438, 98.32, 144);
         Assert.Contains("[PASSED]", text);
         Assert.Contains("5.73*", text);
         var lines = text.Split('\n');
@@ -196,12 +196,13 @@ public class ChatboxFormatterTests
         Assert.Contains("1,234,567", lines[1]);
         Assert.Contains("142pp", lines[1]);
         Assert.Contains("438x", lines[1]);
+        Assert.Contains("98.32% ✓", lines[1]);
     }
 
     [Fact]
     public void RenderResults_drops_artist_when_over_limit()
     {
-        string text = DegradationPolicy.RenderResults("A Very Long Artist Name", "A Very Long Title", "5.73", 999, 100, 100, 60);
+        string text = DegradationPolicy.RenderResults("A Very Long Artist Name", "A Very Long Title", "5.73", 999, 100, 100, 97.5, 60);
         Assert.DoesNotContain("A Very Long Artist", text);
         Assert.Contains("[PASSED]", text);
     }

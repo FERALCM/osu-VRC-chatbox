@@ -104,12 +104,13 @@ public static class DegradationPolicy
     }
 
     /// <summary>Formats the results screen: two lines with song info + score stats.</summary>
-    public static string RenderResults(string artist, string title, string starRating, long score, double pp, int maxCombo, int maxChars)
+    public static string RenderResults(string artist, string title, string starRating, long score, double pp, int maxCombo, double accuracy, int maxChars)
     {
         string scoreFormatted = score.ToString("N0", System.Globalization.CultureInfo.InvariantCulture);
         string ppFormatted = ((int)Math.Round(pp, MidpointRounding.AwayFromZero)).ToString();
+        string accFormatted = accuracy.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture) + "% ✓";
         string stars = !string.IsNullOrEmpty(starRating) ? $" {starRating}*" : "";
-        string statsLine = $"SCORE: {scoreFormatted}, {ppFormatted}pp, {maxCombo}x";
+        string statsLine = $"SCORE: {scoreFormatted}, {ppFormatted}pp, {maxCombo}x, {accFormatted}";
 
         string full = !string.IsNullOrEmpty(artist)
             ? $"[OSU] {artist} - {title}{stars} [PASSED]\n{statsLine}"

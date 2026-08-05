@@ -45,6 +45,7 @@ public sealed record TosuSettings
     public string Host { get; init; } = "127.0.0.1";
     public int Port { get; init; } = 24050;
     public bool AllowRemoteHost { get; init; }
+    public string? ExePath { get; init; }
 
     /// <summary>True when the host is a loopback address (safe default).</summary>
     public bool IsLoopback =>
