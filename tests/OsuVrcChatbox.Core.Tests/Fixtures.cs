@@ -59,7 +59,8 @@ internal static class Fixtures
         double live = 102000, double lastObject = 195000, double mp3Length = 198000,
         double rate = 1.5, int misses = 2, int combo = 438, int maxCombo = 450, double pp = 247.6,
         string mods = "DT", bool paused = false, bool failed = false, int stateNumber = 2,
-        double starRating = 5.73) =>
+        double starRating = 5.73, long score = 1_234_567, double healthBar = 80,
+        double accuracy = 98.32) =>
         new()
         {
             StateNumber = stateNumber,
@@ -83,6 +84,9 @@ internal static class Fixtures
             MapMaxCombo = 800,
             PpCurrent = pp,
             ModsName = mods,
-            StarRating = starRating
+            Accuracy = accuracy,
+            StarRating = starRating,
+            Score = score,
+            HealthBar = healthBar
         };
 }

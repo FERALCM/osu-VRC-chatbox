@@ -77,6 +77,7 @@ public static class SnapshotParser
             MapMaxCombo = beatmap?.Stats?.MaxCombo ?? 0,
             StarRating = beatmap?.Stats?.Stars?.Total ?? 0,
             PpCurrent = play?.Pp?.Current ?? 0,
+            HealthBar = play?.HealthBar?.Smooth ?? 0,
             ModsName = play?.Mods?.Name ?? "",
             Rate = rate,
 

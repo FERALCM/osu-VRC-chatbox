@@ -313,7 +313,7 @@ public sealed class MainViewModel : ObservableObject, IDisposable
         Title = "Ghost", TitleUnicode = "Ghost", Difficulty = "Insane",
         TimeLive = 102000, TimeLastObject = 195000, Mp3Length = 198000, Rate = 1.5,
         Misses = 2, Combo = 438, MaxCombo = 450, PpCurrent = 247.6, ModsName = "DT",
-        Accuracy = 98.32, StarRating = 5.73, BeatmapChecksum = "sample"
+        Accuracy = 98.32, StarRating = 5.73, Score = 1_234_567, HealthBar = 80, BeatmapChecksum = "sample"
     };
 
     // ── Settings persistence ────────────────────────────────────────

@@ -66,6 +66,7 @@ public sealed class PlayDto
 {
     [JsonPropertyName("failed")] public bool Failed { get; set; }
     [JsonPropertyName("score")] public long Score { get; set; }
+    [JsonPropertyName("healthBar")] public HealthBarDto? HealthBar { get; set; }
     [JsonPropertyName("accuracy")] public double Accuracy { get; set; }
     [JsonPropertyName("hits")] public HitsDto? Hits { get; set; }
     [JsonPropertyName("combo")] public ComboDto? Combo { get; set; }
@@ -99,6 +100,12 @@ public sealed class PpDto
 {
     [JsonPropertyName("current")] public double Current { get; set; }
     [JsonPropertyName("fc")] public double Fc { get; set; }
+}
+
+public sealed class HealthBarDto
+{
+    [JsonPropertyName("normal")] public double Normal { get; set; }
+    [JsonPropertyName("smooth")] public double Smooth { get; set; }
 }
 
 public sealed class ResultsScreenDto

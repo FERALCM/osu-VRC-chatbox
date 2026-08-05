@@ -10,7 +10,7 @@
     "stats": { "maxCombo": 800, "stars": { "total": 5.73 } }
   },
   "play": {
-    "failed": false, "accuracy": 98.32,
+    "failed": false, "accuracy": 98.32, "healthBar": { "normal": 80, "smooth": 80 },
     "hits": { "0": 2, "50": 0, "100": 5, "300": 900, "sliderBreaks": 1 },
     "combo": { "current": 438, "max": 450 },
     "mods": { "number": 64, "name": "DT", "rate": 1.5 },

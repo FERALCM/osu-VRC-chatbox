@@ -20,6 +20,8 @@ public sealed record MessageParts
     public string Mods { get; init; } = "";
     public string Accuracy { get; init; } = "";
     public string StarRating { get; init; } = "";
+    public string Score { get; init; } = "";
+    public string Health { get; init; } = "";
 
     /// <summary>Builds token values from a snapshot + computed timing.</summary>
     public static MessageParts Resolve(GameplaySnapshot s, GameplayTiming timing, bool preferUnicode, bool asciiOnly)
@@ -48,8 +50,10 @@ public sealed record MessageParts
             Combo = s.Combo.ToString(CultureInfo.InvariantCulture),
             MaxCombo = s.MaxCombo.ToString(CultureInfo.InvariantCulture),
             Mods = string.IsNullOrEmpty(s.ModsName) ? "" : s.ModsName,
-            Accuracy = s.Accuracy.ToString("0.##", CultureInfo.InvariantCulture) + "%",
-            StarRating = s.StarRating.ToString("0.##", CultureInfo.InvariantCulture)
+            Accuracy = s.Accuracy.ToString("0.##", CultureInfo.InvariantCulture) + (asciiOnly ? "% acc" : "% ✓"),
+            StarRating = s.StarRating.ToString("0.##", CultureInfo.InvariantCulture),
+            Score = s.Score.ToString("N0", CultureInfo.InvariantCulture),
+            Health = ((int)Math.Round(s.HealthBar, MidpointRounding.AwayFromZero)).ToString(CultureInfo.InvariantCulture) + (asciiOnly ? "<3" : "♥")
         };
     }
 
@@ -69,6 +73,8 @@ public sealed record MessageParts
             .Replace("{maxcombo}", MaxCombo, StringComparison.OrdinalIgnoreCase)
             .Replace("{mods}", Mods, StringComparison.OrdinalIgnoreCase)
             .Replace("{accuracy}", Accuracy, StringComparison.OrdinalIgnoreCase)
-            .Replace("{starrating}", StarRating, StringComparison.OrdinalIgnoreCase);
+            .Replace("{starrating}", StarRating, StringComparison.OrdinalIgnoreCase)
+            .Replace("{score}", Score, StringComparison.OrdinalIgnoreCase)
+            .Replace("{health}", Health, StringComparison.OrdinalIgnoreCase);
     }
 }

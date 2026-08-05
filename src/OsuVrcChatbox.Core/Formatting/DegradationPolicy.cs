@@ -4,7 +4,7 @@ namespace OsuVrcChatbox.Core.Formatting;
 /// Deterministic length degradation for the built-in presets. The default layout is:
 /// <c>[OSU] artist - title [difficulty] stars* | -remaining | pp pp | misses miss | combo x combo</c>
 /// Fields are shed in this order to fit within MaxChars:
-/// difficulty → artist → misses → remaining time.
+/// difficulty → health → accuracy → score → artist → misses → remaining time.
 /// Dividers (<c>|</c>) are inserted only between segments that are present.
 /// </summary>
 public static class DegradationPolicy
@@ -15,19 +15,22 @@ public static class DegradationPolicy
     {
         bool twoLine = preset == MessagePreset.TwoLine;
 
-        // Degradation ladder: drop difficulty → drop artist → drop misses → drop remaining
-        var ladder = new (MessageParts Parts, bool ShowMisses, bool ShowRemaining)[]
+        // Degradation ladder: difficulty → health → accuracy → score → artist → misses → remaining
+        var ladder = new (MessageParts Parts, bool ShowMisses, bool ShowRemaining, bool ShowScore, bool ShowHealth, bool ShowAccuracy)[]
         {
-            (parts, true, true),
-            (parts with { Difficulty = "" }, true, true),
-            (parts with { Difficulty = "", Artist = "" }, true, true),
-            (parts with { Difficulty = "", Artist = "" }, false, true),
-            (parts with { Difficulty = "", Artist = "" }, false, false),
+            (parts, true, true, true, true, true),
+            (parts with { Difficulty = "" }, true, true, true, true, true),
+            (parts with { Difficulty = "", Health = "" }, true, true, true, false, true),
+            (parts with { Difficulty = "", Health = "" }, true, true, true, false, false),
+            (parts with { Difficulty = "", Health = "" }, true, true, false, false, false),
+            (parts with { Difficulty = "", Health = "", Artist = "" }, true, true, false, false, false),
+            (parts with { Difficulty = "", Health = "", Artist = "" }, false, true, false, false, false),
+            (parts with { Difficulty = "", Health = "", Artist = "" }, false, false, false, false, false),
         };
 
         for (int i = 0; i < ladder.Length; i++)
         {
-            string text = Normalize(Render(ladder[i].Parts, twoLine, ladder[i].ShowMisses, ladder[i].ShowRemaining), maxLines);
+            string text = Normalize(Render(ladder[i].Parts, twoLine, ladder[i].ShowMisses, ladder[i].ShowRemaining, ladder[i].ShowScore, ladder[i].ShowHealth, ladder[i].ShowAccuracy), maxLines);
             if (UnicodeText.Length(text) <= maxChars)
                 return (text, Degraded: i > 0);
         }
@@ -35,7 +38,7 @@ public static class DegradationPolicy
         // Final fallback: truncate the title on the most-reduced variant until it fits.
         var reduced = ladder[^1];
         var work = reduced.Parts;
-        string rendered = Normalize(Render(work, twoLine, reduced.ShowMisses, reduced.ShowRemaining), maxLines);
+        string rendered = Normalize(Render(work, twoLine, reduced.ShowMisses, reduced.ShowRemaining, reduced.ShowScore, reduced.ShowHealth, reduced.ShowAccuracy), maxLines);
 
         for (int attempt = 0; attempt < MaxTitleTruncateIterations; attempt++)
         {
@@ -47,18 +50,21 @@ public static class DegradationPolicy
 
             int newTitleLen = Math.Max(0, UnicodeText.Length(work.Title) - over);
             work = work with { Title = newTitleLen == 0 ? "" : UnicodeText.Truncate(work.Title, newTitleLen, withEllipsis: true) };
-            rendered = Normalize(Render(work, twoLine, reduced.ShowMisses, reduced.ShowRemaining), maxLines);
+            rendered = Normalize(Render(work, twoLine, reduced.ShowMisses, reduced.ShowRemaining, reduced.ShowScore), maxLines);
         }
 
         string hard = UnicodeText.Truncate(rendered, maxChars, withEllipsis: true);
         return (Normalize(hard, maxLines), Degraded: true);
     }
 
-    public static string Render(MessageParts p, bool twoLine, bool showMisses, bool showRemaining)
+    public static string Render(MessageParts p, bool twoLine, bool showMisses, bool showRemaining, bool showScore = false, bool showHealth = false, bool showAccuracy = false)
     {
         string head = BuildHead(p);
-        string stats = BuildStats(p, showMisses, showRemaining);
-        return twoLine ? $"{head}\n{stats}" : string.IsNullOrEmpty(stats) ? head : $"{head} | {stats}";
+        string stats = BuildStats(p, showMisses, showRemaining, showHealth, showAccuracy);
+        string line1 = twoLine ? $"{head}\n{stats}" : string.IsNullOrEmpty(stats) ? head : $"{head} | {stats}";
+        if (showScore && !string.IsNullOrEmpty(p.Score))
+            return $"{line1}\n{p.Score}";
+        return line1;
     }
 
     private static string BuildHead(MessageParts p)
@@ -74,7 +80,7 @@ public static class DegradationPolicy
         return head;
     }
 
-    private static string BuildStats(MessageParts p, bool showMisses, bool showRemaining)
+    private static string BuildStats(MessageParts p, bool showMisses, bool showRemaining, bool showHealth = false, bool showAccuracy = false)
     {
         var segments = new List<string>();
 
@@ -87,6 +93,12 @@ public static class DegradationPolicy
             segments.Add($"{p.Misses} miss");
 
         segments.Add($"{p.Combo}x combo");
+
+        if (showAccuracy && !string.IsNullOrEmpty(p.Accuracy))
+            segments.Add(p.Accuracy);
+
+        if (showHealth && !string.IsNullOrEmpty(p.Health))
+            segments.Add(p.Health);
 
         return string.Join(" | ", segments);
     }
@@ -121,13 +133,13 @@ public static class DegradationPolicy
         string line3 = $"{misses} miss, -{remaining} xD";
 
         string full = !string.IsNullOrEmpty(artist)
-            ? $"[OSU] {artist} - {title}{stars}\n[FAILURE, NO PP GAINS :3c ]\n{line3}"
-            : $"[OSU] {title}{stars}\n[FAILURE, NO PP GAINS :3c ]\n{line3}";
+            ? $"[OSU] {artist} - {title}{stars}\n[FAILURE, NO PP GAINS :3]\n{line3}"
+            : $"[OSU] {title}{stars}\n[FAILURE, NO PP GAINS :3]\n{line3}";
 
         if (UnicodeText.Length(full) <= maxChars)
             return full;
 
-        string noArtist = $"[OSU] {title}{stars}\n[FAILURE, NO PP GAINS :3c ]\n{line3}";
+        string noArtist = $"[OSU] {title}{stars}\n[FAILURE, NO PP GAINS :3]\n{line3}";
         if (UnicodeText.Length(noArtist) <= maxChars)
             return noArtist;
 

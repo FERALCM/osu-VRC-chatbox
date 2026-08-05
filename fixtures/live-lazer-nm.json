@@ -1,0 +1,102 @@
+{
+  "state": {
+    "number": 2,
+    "name": "play"
+  },
+  "game": {
+    "focused": true,
+    "paused": false
+  },
+  "beatmap": {
+    "checksum": "914109591c4556994fa74e4dc4b98610",
+    "id": 5718262,
+    "artist": "Smi x mei",
+    "artistUnicode": "스미 x mei",
+    "title": "numb numb",
+    "titleUnicode": "numb numb",
+    "mapper": "Reioli",
+    "version": "miyo's insane",
+    "time": {
+      "live": 41525,
+      "firstObject": 7493,
+      "lastObject": 163493,
+      "mp3Length": 185867
+    },
+    "stats": {
+      "maxCombo": 695,
+      "stars": {
+        "live": 3.08,
+        "aim": 2.23,
+        "speed": 1.66,
+        "sliderFactor": 0.96,
+        "reading": 0.41,
+        "hitWindow": 34.5,
+        "total": 4.05
+      }
+    }
+  },
+  "play": {
+    "failed": false,
+    "score": 84820,
+    "healthBar": { "normal": 70, "smooth": 70 },
+    "accuracy": 86.60042155977116,
+    "hits": {
+      "0": 2,
+      "50": 1,
+      "100": 18,
+      "300": 62,
+      "sliderBreaks": 0
+    },
+    "combo": {
+      "current": 22,
+      "max": 124
+    },
+    "mods": {
+      "checksum": "",
+      "number": 0,
+      "name": "",
+      "array": [],
+      "rate": 1
+    },
+    "pp": {
+      "current": 18.11,
+      "fc": 83.59
+    }
+  },
+  "resultsScreen": {
+    "scoreId": 0,
+    "playerName": "",
+    "mode": {
+      "number": 0,
+      "name": "osu"
+    },
+    "score": 0,
+    "accuracy": 0,
+    "name": "",
+    "hits": {
+      "0": 0,
+      "50": 0,
+      "100": 0,
+      "300": 0,
+      "geki": 0,
+      "katu": 0,
+      "sliderEndHits": 0,
+      "smallTickHits": 0,
+      "largeTickHits": 0
+    },
+    "mods": {
+      "checksum": "",
+      "number": 0,
+      "name": "",
+      "array": [],
+      "rate": 1
+    },
+    "maxCombo": 0,
+    "rank": "",
+    "pp": {
+      "current": 0,
+      "fc": 0
+    },
+    "createdAt": ""
+  }
+}

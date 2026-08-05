@@ -83,4 +83,23 @@ public class SnapshotParserTests
         Assert.Equal(3, s.ResultsMisses);
         Assert.Equal(512, s.ResultsMaxCombo);
     }
+
+    [Fact]
+    public void Parses_real_lazer_fixture_with_star_rating_and_score()
+    {
+        string json = System.IO.File.ReadAllText(
+            System.IO.Path.Combine("..", "..", "..", "..", "..", "fixtures", "live-lazer-nm.json"));
+        var s = SnapshotParser.TryParse(json);
+
+        Assert.NotNull(s);
+        Assert.Equal(2, s!.StateNumber);
+        Assert.Equal("Smi x mei", s.Artist);
+        Assert.Equal("numb numb", s.Title);
+        Assert.Equal("miyo's insane", s.Difficulty);
+        Assert.Equal(4.05, s.StarRating, 2);
+        Assert.Equal(84820, s.Score);
+        Assert.Equal(1.0, s.Rate);
+        Assert.Equal(695, s.MapMaxCombo);
+        Assert.Equal(185867, s.Mp3Length);
+    }
 }

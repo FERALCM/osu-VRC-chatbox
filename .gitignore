@@ -19,6 +19,9 @@ x86/
 coverage*.json
 *.coverage
 
+## Publish output
+publish/
+
 ## App runtime
 *.log
 settings.json.bak

@@ -44,6 +44,8 @@ public sealed record GameplaySnapshot
     /// <summary>Star rating (tosu <c>beatmap.stats.stars.total</c>).</summary>
     public double StarRating { get; init; }
     public double PpCurrent { get; init; }
+    /// <summary>Player health bar (tosu <c>play.healthBar.smooth</c>); 0–100 range.</summary>
+    public double HealthBar { get; init; }
     public string ModsName { get; init; } = "";
     /// <summary>Effective clock-rate multiplier (tosu <c>play.mods.rate</c>); 1.0 when unmodded/absent.</summary>
     public double Rate { get; init; } = 1.0;
